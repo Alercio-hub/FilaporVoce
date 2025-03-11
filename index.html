@@ -1,0 +1,1013 @@
+<!DOCTYPE html><html lang="pt" class="scroll-smooth"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FilaporVoce</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              light: '#6ECF74',
+              DEFAULT: '#4CAF50',
+              dark: '#3A8C3E',
+            },
+            secondary: {
+              light: '#F8F9FA',
+              DEFAULT: '#E9ECEF',
+              dark: '#DEE2E6',
+            },
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          keyframes: {
+            wave: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            bounce: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-5px)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            }
+          },
+          animation: {
+            wave: 'wave 3s ease-in-out infinite',
+            bounce: 'bounce 2s ease-in-out infinite',
+            fadeIn: 'fadeIn 1.5s ease-in-out forwards',
+          },
+        },
+      },
+      darkMode: 'class',
+    }
+  </script>
+  <style type="text/css">
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    .dark {
+      color-scheme: dark;
+    }
+    
+    .dark body {
+      background-color: #181818;
+      color: #e0e0e0;
+    }
+    
+    .dark .bg-white {
+      background-color: #222;
+    }
+    
+    .dark .text-gray-800 {
+      color: #e0e0e0;
+    }
+    
+    .dark .bg-secondary-light {
+      background-color: #333;
+    }
+    
+    .dark .border-gray-200 {
+      border-color: #444;
+    }
+    
+    .gradient-heading {
+      background-image: linear-gradient(135deg, #4CAF50, #2C8E2F);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .dark .gradient-heading {
+      background-image: linear-gradient(135deg, #6ECF74, #4CAF50);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .dark .card-hover:hover {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .progress-bar {
+      height: 3px;
+      background: linear-gradient(to right, #4CAF50, #6ECF74);
+      width: 0%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 50;
+    }
+    
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .active-section {
+      position: relative;
+    }
+    
+    .active-section::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #fff;
+      border-radius: 1px;
+    }
+  </style>
+</head>
+<body class="font-sans bg-secondary-light text-gray-800">
+  <div class="progress-bar" id="progressBar"></div>
+  
+  <!-- Botão volta ao topo -->
+  <button id="backToTop" class="fixed bottom-5 right-5 bg-primary p-3 rounded-full text-white shadow-lg opacity-0 transition-opacity duration-300 hover:bg-primary-dark focus:outline-none z-50">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Header com efeito gradiente -->
+  <header class="bg-gradient-to-r from-primary to-primary-light text-white py-6 shadow-md relative overflow-hidden">
+    <div class="absolute w-full h-full top-0 left-0">
+      <div class="absolute w-16 h-16 bg-white opacity-10 rounded-full -top-5 -left-5 animate-wave"></div>
+      <div class="absolute w-12 h-12 bg-white opacity-10 rounded-full top-20 left-32 animate-wave" style="animation-delay: 0.5s"></div>
+      <div class="absolute w-10 h-10 bg-white opacity-10 rounded-full top-10 right-10 animate-wave" style="animation-delay: 1s"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center mb-4 md:mb-0">
+          <i class="fas fa-hourglass-half text-3xl mr-3 animate-bounce"></i>
+          <div>
+            <h1 class="text-3xl md:text-4xl font-bold">FilaporVoce</h1>
+            <p class="text-white/80 italic">Você economiza tempo, nós cuidamos da fila!</p>
+          </div>
+        </div>
+        
+        <nav class="w-full md:w-auto">
+          <ul class="flex flex-wrap justify-center space-x-1 md:space-x-3 text-sm md:text-base">
+            <li><a href="#sobre" class="nav-link py-2 px-3 inline-block hover:bg-white/20 rounded-lg transition-colors duration-300">
+              <i class="fas fa-info-circle mr-1"></i> Sobre
+            </a></li>
+            <li><a href="#precos" class="nav-link py-2 px-3 inline-block hover:bg-white/20 rounded-lg transition-colors duration-300">
+              <i class="fas fa-tag mr-1"></i> Preços
+            </a></li>
+            <li><a href="#formadores" class="nav-link py-2 px-3 inline-block hover:bg-white/20 rounded-lg transition-colors duration-300">
+              <i class="fas fa-user-plus mr-1"></i> Formadores
+            </a></li>
+            <li><a href="#solicitacao" class="nav-link py-2 px-3 inline-block hover:bg-white/20 rounded-lg transition-colors duration-300">
+              <i class="fas fa-clipboard-list mr-1"></i> Solicitação
+            </a></li>
+            <li><a href="#regras" class="nav-link py-2 px-3 inline-block hover:bg-white/20 rounded-lg transition-colors duration-300">
+              <i class="fas fa-gavel mr-1"></i> Regras
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero section com animação -->
+  <section class="py-16 bg-gradient-to-b from-primary-light/10 to-transparent">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <div class="md:w-1/2 mb-8 md:mb-0" data-aos="fade-right">
+          <h2 class="text-4xl font-bold mb-4 gradient-heading">Seu tempo é valioso!</h2>
+          <p class="text-lg mb-6">Deixe que formemos fila para você enquanto aproveita seu tempo com o que realmente importa.</p>
+          <div class="flex space-x-4">
+            <a href="#precos" class="bg-primary hover:bg-primary-dark text-white font-medium py-2 px-6 rounded-lg transition-colors duration-300 shadow-md flex items-center">
+              <i class="fas fa-tag mr-2"></i> Ver preços
+            </a>
+            <a href="#solicitacao" class="bg-white hover:bg-gray-100 text-primary font-medium py-2 px-6 rounded-lg transition-colors duration-300 shadow-md border border-primary/20 flex items-center">
+              <i class="fas fa-paper-plane mr-2"></i> Solicitar
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/2 flex justify-center" data-aos="fade-left">
+          <div class="relative w-80 h-80">
+            <!-- Ilustração SVG de relógio/tempo -->
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <circle cx="50" cy="50" r="45" fill="#f0f9f0" stroke="#4CAF50" stroke-width="2"></circle>
+              <circle cx="50" cy="50" r="3" fill="#4CAF50"></circle>
+              <line x1="50" y1="50" x2="50" y2="20" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" class="animate-spin" style="transform-origin: center; animation-duration: 10s;"></line>
+              <line x1="50" y1="50" x2="65" y2="65" stroke="#333" stroke-width="2" stroke-linecap="round" class="animate-spin" style="transform-origin: center; animation-duration: 60s;"></line>
+              <!-- Números do relógio -->
+              <text x="50" y="15" font-size="4" text-anchor="middle">12</text>
+              <text x="70" y="30" font-size="4" text-anchor="middle">3</text>
+              <text x="50" y="85" font-size="4" text-anchor="middle">6</text>
+              <text x="30" y="30" font-size="4" text-anchor="middle">9</text>
+            </svg>
+            <!-- Pessoas na fila -->
+            <div class="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
+              <div class="flex flex-col items-center">
+                <div class="w-6 h-6 rounded-full bg-primary mb-1"></div>
+                <div class="w-5 h-5 rounded-full bg-primary-dark mb-1 ml-2 animate-wave" style="animation-delay: 0.2s"></div>
+                <div class="w-6 h-6 rounded-full bg-primary mb-1"></div>
+                <div class="w-5 h-5 rounded-full bg-primary-dark mb-1 ml-2 animate-wave" style="animation-delay: 0.4s"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="py-10">
+    <!-- Stats -->
+    <section class="py-10 bg-white shadow-md dark:bg-gray-800">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div class="p-6" data-aos="fade-up" data-aos-delay="100">
+            <i class="fas fa-users text-4xl text-primary mb-4"></i>
+            <h3 class="text-2xl font-bold mb-2"><span class="counter" data-target="1000">0</span>+</h3>
+            <p class="text-gray-600 dark:text-gray-300">Clientes Satisfeitos</p>
+          </div>
+          <div class="p-6" data-aos="fade-up" data-aos-delay="200">
+            <i class="fas fa-clock text-4xl text-primary mb-4"></i>
+            <h3 class="text-2xl font-bold mb-2"><span class="counter" data-target="5000">0</span>+</h3>
+            <p class="text-gray-600 dark:text-gray-300">Horas Economizadas</p>
+          </div>
+          <div class="p-6" data-aos="fade-up" data-aos-delay="300">
+            <i class="fas fa-user-tie text-4xl text-primary mb-4"></i>
+            <h3 class="text-2xl font-bold mb-2"><span class="counter" data-target="50">0</span>+</h3>
+            <p class="text-gray-600 dark:text-gray-300">Formadores Verificados</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Sobre -->
+    <section id="sobre" class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold gradient-heading inline-block mb-4" data-aos="fade-up">Sobre o FilaporVoce</h2>
+          <div class="w-24 h-1 bg-primary mx-auto rounded-full mb-6"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div data-aos="fade-right">
+            <div class="relative rounded-xl overflow-hidden shadow-xl">
+              <div class="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary-light/20 opacity-75"></div>
+              <!-- SVG ilustrativo -->
+              <svg viewBox="0 0 400 300" class="w-full">
+                <rect width="400" height="300" fill="#f8f9fa"></rect>
+                <!-- Escritório/Banco -->
+                <rect x="50" y="50" width="300" height="150" fill="#e9ecef" stroke="#dee2e6" stroke-width="2"></rect>
+                <rect x="170" y="50" width="60" height="40" fill="#dee2e6"></rect>
+                <rect x="180" y="150" width="40" height="50" fill="#dee2e6"></rect>
+                <!-- Pessoas na fila -->
+                <circle cx="100" cy="230" r="15" fill="#4CAF50" class="animate-bounce" style="animation-delay: 0.1s"></circle>
+                <circle cx="150" cy="230" r="15" fill="#6ECF74" class="animate-bounce" style="animation-delay: 0.2s"></circle>
+                <circle cx="200" cy="230" r="15" fill="#4CAF50" class="animate-bounce" style="animation-delay: 0.3s"></circle>
+                <circle cx="250" cy="230" r="15" fill="#6ECF74" class="animate-bounce" style="animation-delay: 0.4s"></circle>
+                <circle cx="300" cy="230" r="15" fill="#4CAF50" class="animate-bounce" style="animation-delay: 0.5s"></circle>
+              </svg>
+            </div>
+          </div>
+          
+          <div data-aos="fade-left">
+            <h3 class="text-2xl font-semibold mb-4">Uma solução inovadora para economizar seu tempo</h3>
+            <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">O <span class="font-medium text-primary">FilaporVoce</span> é uma plataforma inovadora que conecta clientes a formadores de fila confiáveis e verificados, permitindo que você economize tempo e evite o incômodo de esperar.</p>
+            <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">Se você precisa de alguém para formar fila em bancos, repartições públicas, lojas ou eventos, nós temos a solução ideal!</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+              <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-start">
+                <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                <div>
+                  <h4 class="font-medium">Economia de Tempo</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">Aproveite suas horas em atividades que realmente importam</p>
+                </div>
+              </div>
+              <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-start">
+                <i class="fas fa-shield-alt text-primary mt-1 mr-3"></i>
+                <div>
+                  <h4 class="font-medium">Formadores Verificados</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">Profissionais confiáveis com documentação validada</p>
+                </div>
+              </div>
+              <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-start">
+                <i class="fas fa-hand-holding-usd text-primary mt-1 mr-3"></i>
+                <div>
+                  <h4 class="font-medium">Preços Acessíveis</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">Valores justos de acordo com o tipo de fila</p>
+                </div>
+              </div>
+              <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-start">
+                <i class="fas fa-thumbs-up text-primary mt-1 mr-3"></i>
+                <div>
+                  <h4 class="font-medium">Garantia de Serviço</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">Reembolso total caso o serviço não seja cumprido</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Preços -->
+    <section id="precos" class="py-16 bg-white dark:bg-gray-800 shadow-md">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold gradient-heading inline-block mb-4" data-aos="fade-up">Tabela de Preços</h2>
+          <div class="w-24 h-1 bg-primary mx-auto rounded-full mb-6"></div>
+          <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">Oferecemos valores competitivos e transparentes para cada tipo de serviço. Escolha a opção que melhor atende às suas necessidades.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Fila Rápida -->
+          <div class="card-hover bg-secondary-light dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg transition-all duration-300" data-aos="zoom-in" data-aos-delay="100">
+            <div class="bg-primary-light text-white p-6 text-center">
+              <i class="fas fa-bolt text-2xl mb-2"></i>
+              <h3 class="text-xl font-bold">Fila Rápida</h3>
+              <p class="opacity-80 text-sm">Até 1 hora</p>
+            </div>
+            <div class="p-6">
+              <div class="text-center mb-6">
+                <p class="text-3xl font-bold">75 MZN</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Valor fixo</p>
+              </div>
+              <ul class="space-y-3">
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Ideal para serviços rápidos</span>
+                </li>
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Bancos em horários de baixo fluxo</span>
+                </li>
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Retirada de documentos simples</span>
+                </li>
+              </ul>
+              <a href="#solicitacao" class="block text-center bg-primary text-white font-medium py-2 px-4 rounded-lg mt-6 hover:bg-primary-dark transition-colors duration-300">Solicitar Serviço</a>
+            </div>
+          </div>
+          
+          <!-- Fila Média -->
+          <div class="card-hover bg-secondary-light dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg transition-all duration-300" data-aos="zoom-in" data-aos-delay="200">
+            <div class="bg-primary text-white p-6 text-center">
+              <i class="fas fa-clock text-2xl mb-2"></i>
+              <h3 class="text-xl font-bold">Fila Média</h3>
+              <p class="opacity-80 text-sm">1 a 3 horas</p>
+            </div>
+            <div class="p-6">
+              <div class="text-center mb-6">
+                <p class="text-3xl font-bold">225 MZN</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Valor fixo</p>
+              </div>
+              <ul class="space-y-3">
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Bancos em horários de pico</span>
+                </li>
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Serviços em repartições públicas</span>
+                </li>
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Processos com maior tempo de espera</span>
+                </li>
+              </ul>
+              <a href="#solicitacao" class="block text-center bg-primary text-white font-medium py-2 px-4 rounded-lg mt-6 hover:bg-primary-dark transition-colors duration-300">Solicitar Serviço</a>
+            </div>
+          </div>
+          
+          <!-- Fila Longa -->
+          <div class="card-hover bg-secondary-light dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg transition-all duration-300" data-aos="zoom-in" data-aos-delay="300">
+            <div class="bg-primary-dark text-white p-6 text-center">
+              <i class="fas fa-hourglass-half text-2xl mb-2"></i>
+              <h3 class="text-xl font-bold">Fila Longa</h3>
+              <p class="opacity-80 text-sm">Acima de 3 horas</p>
+            </div>
+            <div class="p-6">
+              <div class="text-center mb-6">
+                <p class="text-3xl font-bold">75 MZN</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Por hora adicional</p>
+              </div>
+              <ul class="space-y-3">
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Serviços com alta demanda</span>
+                </li>
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Documentos com processos complexos</span>
+                </li>
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Filas em dias de pico ou eventos</span>
+                </li>
+              </ul>
+              <a href="#solicitacao" class="block text-center bg-primary text-white font-medium py-2 px-4 rounded-lg mt-6 hover:bg-primary-dark transition-colors duration-300">Solicitar Serviço</a>
+            </div>
+          </div>
+          
+          <!-- Fila Especial -->
+          <div class="card-hover bg-secondary-light dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg transition-all duration-300" data-aos="zoom-in" data-aos-delay="400">
+            <div class="bg-gradient-to-r from-primary to-primary-dark text-white p-6 text-center">
+              <i class="fas fa-star text-2xl mb-2"></i>
+              <h3 class="text-xl font-bold">Fila Especial</h3>
+              <p class="opacity-80 text-sm">Casos específicos</p>
+            </div>
+            <div class="p-6">
+              <div class="text-center mb-6">
+                <p class="text-2xl font-bold">Sob consulta</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Valor personalizado</p>
+              </div>
+              <ul class="space-y-3">
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Documentos urgentes</span>
+                </li>
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Ocasiões de altíssima demanda</span>
+                </li>
+                <li class="flex items-center text-sm">
+                  <i class="fas fa-check text-primary mr-2"></i>
+                  <span>Processos com requisitos especiais</span>
+                </li>
+              </ul>
+              <a href="#solicitacao" class="block text-center bg-primary text-white font-medium py-2 px-4 rounded-lg mt-6 hover:bg-primary-dark transition-colors duration-300">Solicitar Serviço</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-primary/10 dark:bg-primary/5 p-6 rounded-lg mt-12 max-w-3xl mx-auto" data-aos="fade-up">
+          <p class="text-center"><strong>Nota:</strong> Cobramos uma comissão fixa de <strong>15%</strong> sobre o valor total do serviço, que será deduzida antes do pagamento ao formador.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Formadores -->
+    <section id="formadores" class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold gradient-heading inline-block mb-4" data-aos="fade-up">Cadastro para Formadores</h2>
+          <div class="w-24 h-1 bg-primary mx-auto rounded-full mb-6"></div>
+          <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">Quer ganhar dinheiro ajudando as pessoas a economizar tempo? Cadastre-se como formador de fila e comece a receber solicitações!</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div data-aos="fade-right">
+            <h3 class="text-2xl font-semibold mb-4">Vantagens de ser um formador</h3>
+            <div class="space-y-6">
+              <div class="flex items-start">
+                <div class="bg-primary text-white p-3 rounded-full mr-4 shrink-0">
+                  <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div>
+                  <h4 class="text-lg font-medium mb-1">Renda Extra</h4>
+                  <p class="text-gray-700 dark:text-gray-300">Ganhe dinheiro nos seus tempos livres formando filas para pessoas ocupadas.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="bg-primary text-white p-3 rounded-full mr-4 shrink-0">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div>
+                  <h4 class="text-lg font-medium mb-1">Horário Flexível</h4>
+                  <p class="text-gray-700 dark:text-gray-300">Aceite apenas os trabalhos que se encaixam na sua agenda. Você controla sua disponibilidade.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="bg-primary text-white p-3 rounded-full mr-4 shrink-0">
+                  <i class="fas fa-star"></i>
+                </div>
+                <div>
+                  <h4 class="text-lg font-medium mb-1">Sistema de Avaliação</h4>
+                  <p class="text-gray-700 dark:text-gray-300">Receba avaliações positivas dos clientes e aumente suas chances de novas solicitações.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="bg-primary text-white p-3 rounded-full mr-4 shrink-0">
+                  <i class="fas fa-comments"></i>
+                </div>
+                <div>
+                  <h4 class="text-lg font-medium mb-1">Suporte Dedicado</h4>
+                  <p class="text-gray-700 dark:text-gray-300">Conte com nossa equipe para solucionar dúvidas e ajudá-lo durante os atendimentos.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 card-hover" data-aos="fade-left">
+            <div class="text-center mb-6">
+              <i class="fas fa-user-plus text-5xl text-primary mb-4"></i>
+              <h3 class="text-2xl font-semibold">Torne-se um Formador</h3>
+              <p class="text-gray-600 dark:text-gray-300 mt-2">Preencha o formulário de cadastro e comece logo</p>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="bg-secondary-light dark:bg-gray-700 p-4 rounded-lg">
+                <h4 class="font-medium flex items-center">
+                  <i class="fas fa-check-circle text-primary mr-2"></i>
+                  Processo Simples
+                </h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">Cadastro rápido com validação em até 24 horas</p>
+              </div>
+              
+              <div class="bg-secondary-light dark:bg-gray-700 p-4 rounded-lg">
+                <h4 class="font-medium flex items-center">
+                  <i class="fas fa-id-card text-primary mr-2"></i>
+                  Documentação Necessária
+                </h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">Apenas foto do BI para confirmar sua identidade</p>
+              </div>
+              
+              <div class="bg-secondary-light dark:bg-gray-700 p-4 rounded-lg">
+                <h4 class="font-medium flex items-center">
+                  <i class="fas fa-hand-holding-usd text-primary mr-2"></i>
+                  Pagamentos Seguros
+                </h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">Receba seus pagamentos de forma segura após cada serviço</p>
+              </div>
+            </div>
+            
+            <a href="https://docs.google.com/forms/d/1bnArdlDqf2ZUf7sGEkx4AGu18_1cf2K39ATlGzYWyVE/edit" target="_blank" class="block text-center bg-primary text-white font-medium py-3 px-6 rounded-lg mt-8 hover:bg-primary-dark transition-colors duration-300 shadow-md">
+              <i class="fas fa-paper-plane mr-2"></i> Cadastrar como Formador
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="py-16 bg-white dark:bg-gray-800 shadow-md">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold gradient-heading inline-block mb-4" data-aos="fade-up">O que nossos clientes dizem</h2>
+          <div class="w-24 h-1 bg-primary mx-auto rounded-full mb-6"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-secondary-light dark:bg-gray-700 p-6 rounded-lg shadow-md card-hover" data-aos="fade-up" data-aos-delay="100">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                <span class="font-bold">MA</span>
+              </div>
+              <div>
+                <h4 class="font-medium">Maria A.</h4>
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300">"Economizei mais de 3 horas que seriam perdidas em uma fila no banco. O formador foi pontual e me manteve informada durante todo o processo."</p>
+          </div>
+          
+          <div class="bg-secondary-light dark:bg-gray-700 p-6 rounded-lg shadow-md card-hover" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                <span class="font-bold">JP</span>
+              </div>
+              <div>
+                <h4 class="font-medium">João P.</h4>
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300">"Precisava urgentemente de um documento da repartição e não poderia faltar ao trabalho. O serviço foi excelente e recebi meu documento sem estresse."</p>
+          </div>
+          
+          <div class="bg-secondary-light dark:bg-gray-700 p-6 rounded-lg shadow-md card-hover" data-aos="fade-up" data-aos-delay="300">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                <span class="font-bold">CM</span>
+              </div>
+              <div>
+                <h4 class="font-medium">Carlos M.</h4>
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300">"Já utilizei o serviço 3 vezes e sempre com ótimo resultado. Plataforma confiável e formadores educados. Recomendo a todos que valorizam seu tempo."</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Solicitação -->
+    <section id="solicitacao" class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold gradient-heading inline-block mb-4" data-aos="fade-up">Solicitação de Serviço</h2>
+          <div class="w-24 h-1 bg-primary mx-auto rounded-full mb-6"></div>
+          <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">Precisa que alguém forme fila para você? Faça sua solicitação e receba atendimento de um formador de fila confiável.</p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden" data-aos="fade-up">
+          <div class="grid grid-cols-1 md:grid-cols-2">
+            <div class="bg-gradient-to-br from-primary to-primary-dark text-white p-8 flex flex-col justify-center">
+              <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4">Como funciona?</h3>
+                <div class="space-y-4">
+                  <div class="flex items-start">
+                    <div class="bg-white/20 rounded-full w-8 h-8 flex items-center justify-center mr-3 shrink-0">
+                      <span class="font-bold">1</span>
+                    </div>
+                    <p>Preencha o formulário com os detalhes do serviço que você precisa</p>
+                  </div>
+                  
+                  <div class="flex items-start">
+                    <div class="bg-white/20 rounded-full w-8 h-8 flex items-center justify-center mr-3 shrink-0">
+                      <span class="font-bold">2</span>
+                    </div>
+                    <p>Realize o pagamento via M-Pesa, eMola ou depósito bancário</p>
+                  </div>
+                  
+                  <div class="flex items-start">
+                    <div class="bg-white/20 rounded-full w-8 h-8 flex items-center justify-center mr-3 shrink-0">
+                      <span class="font-bold">3</span>
+                    </div>
+                    <p>Receba a confirmação e os dados do formador designado</p>
+                  </div>
+                  
+                  <div class="flex items-start">
+                    <div class="bg-white/20 rounded-full w-8 h-8 flex items-center justify-center mr-3 shrink-0">
+                      <span class="font-bold">4</span>
+                    </div>
+                    <p>Acompanhe o status do serviço e receba seu documento/atendimento</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white/10 p-4 rounded-lg">
+                <h4 class="font-medium mb-2 flex items-center">
+                  <i class="fas fa-shield-alt mr-2"></i>
+                  Garantia de Satisfação
+                </h4>
+                <p class="text-sm opacity-90">Se o formador não cumprir o serviço, garantimos a disponibilização de outro ou o reembolso total.</p>
+              </div>
+            </div>
+            
+            <div class="p-8">
+              <h3 class="text-xl font-semibold mb-6 text-center">Solicite seu atendimento</h3>
+              <p class="mb-6 text-gray-600 dark:text-gray-300 text-center">Preencha o formulário completo com todas as informações necessárias para atendermos da melhor forma.</p>
+              
+              <div class="space-y-4">
+                <div class="bg-primary/10 dark:bg-primary/5 p-4 rounded-lg flex items-center">
+                  <i class="fas fa-info-circle text-primary mr-3 text-xl"></i>
+                  <p class="text-sm">O formulário é preenchido em uma plataforma externa segura</p>
+                </div>
+                
+                <div class="bg-primary/10 dark:bg-primary/5 p-4 rounded-lg flex items-center">
+                  <i class="fas fa-clock text-primary mr-3 text-xl"></i>
+                  <p class="text-sm">Resposta em até 2 horas após o envio da solicitação</p>
+                </div>
+              </div>
+              
+              <a href="https://docs.google.com/forms/d/1643i1toONC1JO2ajqGk8iZoAJytHY6L5D1RU2lsgX8I/edit" target="_blank" class="block text-center bg-primary text-white font-medium py-3 px-6 rounded-lg mt-8 hover:bg-primary-dark transition-colors duration-300 shadow-md w-full">
+                <i class="fas fa-paper-plane mr-2"></i> Solicitar Serviço Agora
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção FAQ/Regras -->
+    <section id="regras" class="py-16 bg-white dark:bg-gray-800 shadow-md">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold gradient-heading inline-block mb-4" data-aos="fade-up">Regras e Condições</h2>
+          <div class="w-24 h-1 bg-primary mx-auto rounded-full mb-6"></div>
+          <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">Antes de utilizar o serviço, leia atentamente as regras:</p>
+        </div>
+        
+        <div class="max-w-3xl mx-auto">
+          <div class="space-y-4" data-aos="fade-up">
+            <!-- Accordion item 1 -->
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div class="accordion-header bg-secondary-light dark:bg-gray-700 px-6 py-4 cursor-pointer flex justify-between items-center">
+                <h3 class="font-medium">Pagamentos</h3>
+                <i class="fas fa-chevron-down text-primary transition-transform duration-300"></i>
+              </div>
+              <div class="accordion-content bg-white dark:bg-gray-800 px-6 py-0">
+                <div class="py-4">
+                  <p class="mb-3">O pagamento do serviço é feito antecipadamente via:</p>
+                  <ul class="list-disc pl-6 space-y-2">
+                    <li>M-Pesa</li>
+                    <li>eMola</li>
+                    <li>Depósito bancário</li>
+                  </ul>
+                  <p class="mt-3">Após a confirmação do pagamento, conectamos você ao formador de fila.</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Accordion item 2 -->
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div class="accordion-header bg-secondary-light dark:bg-gray-700 px-6 py-4 cursor-pointer flex justify-between items-center">
+                <h3 class="font-medium">Garantias</h3>
+                <i class="fas fa-chevron-down text-primary transition-transform duration-300"></i>
+              </div>
+              <div class="accordion-content bg-white dark:bg-gray-800 px-6 py-0">
+                <div class="py-4">
+                  <p>Se o formador não cumprir o serviço, garantimos a disponibilização de outro formador ou o reembolso total do valor pago.</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Accordion item 3 -->
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div class="accordion-header bg-secondary-light dark:bg-gray-700 px-6 py-4 cursor-pointer flex justify-between items-center">
+                <h3 class="font-medium">Cancelamentos</h3>
+                <i class="fas fa-chevron-down text-primary transition-transform duration-300"></i>
+              </div>
+              <div class="accordion-content bg-white dark:bg-gray-800 px-6 py-0">
+                <div class="py-4">
+                  <p>O cancelamento só pode ser solicitado após a conexão com o formador.</p>
+                  <ul class="list-disc pl-6 mt-3 space-y-2">
+                    <li>Cancelamento até 2 horas antes do horário marcado: reembolso integral</li>
+                    <li>Cancelamento com menos de 2 horas de antecedência: retenção de 10% do valor pago</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Accordion item 4 -->
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div class="accordion-header bg-secondary-light dark:bg-gray-700 px-6 py-4 cursor-pointer flex justify-between items-center">
+                <h3 class="font-medium">Verificação de Formadores</h3>
+                <i class="fas fa-chevron-down text-primary transition-transform duration-300"></i>
+              </div>
+              <div class="accordion-content bg-white dark:bg-gray-800 px-6 py-0">
+                <div class="py-4">
+                  <p>Os formadores devem enviar uma foto do BI para confirmar sua identidade durante o cadastro. Todos os formadores são verificados antes de começarem a prestar serviços.</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Accordion item 5 -->
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+              <div class="accordion-header bg-secondary-light dark:bg-gray-700 px-6 py-4 cursor-pointer flex justify-between items-center">
+                <h3 class="font-medium">Comunicação</h3>
+                <i class="fas fa-chevron-down text-primary transition-transform duration-300"></i>
+              </div>
+              <div class="accordion-content bg-white dark:bg-gray-800 px-6 py-0">
+                <div class="py-4">
+                  <p>O formador deve manter comunicação regular com o cliente, informando sobre o andamento da fila e possíveis alterações no tempo de espera estimado.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-12 text-center" data-aos="fade-up">
+            <a href="#solicitacao" class="bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-md">
+              <i class="fas fa-check-circle mr-2"></i> Solicitar Formador
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="py-16 bg-gradient-to-r from-primary to-primary-dark text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-6" data-aos="fade-up">Pronto para economizar seu tempo?</h2>
+        <p class="text-lg mb-8 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">Deixe que cuidemos das filas enquanto você foca no que realmente importa.</p>
+        <div class="flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
+          <a href="#solicitacao" class="bg-white text-primary hover:bg-gray-100 font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-md">
+            <i class="fas fa-paper-plane mr-2"></i> Solicitar Serviço
+          </a>
+          <a href="#precos" class="bg-primary-dark hover:bg-opacity-80 text-white font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-md border border-white/30">
+            <i class="fas fa-tag mr-2"></i> Ver Preços
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-gray-900 text-white py-10">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-gray-800">
+        <div>
+          <h3 class="text-xl font-bold mb-4 flex items-center">
+            <i class="fas fa-hourglass-half mr-2"></i> FilaporVoce
+          </h3>
+          <p class="text-gray-400">Você economiza tempo, nós cuidamos da fila! Serviço de formadores de fila confiáveis para todas as suas necessidades.</p>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Links Rápidos</h3>
+          <ul class="space-y-2">
+            <li><a href="#sobre" class="text-gray-400 hover:text-white transition-colors duration-300">Sobre Nós</a></li>
+            <li><a href="#precos" class="text-gray-400 hover:text-white transition-colors duration-300">Tabela de Preços</a></li>
+            <li><a href="#formadores" class="text-gray-400 hover:text-white transition-colors duration-300">Cadastre-se como Formador</a></li>
+            <li><a href="#solicitacao" class="text-gray-400 hover:text-white transition-colors duration-300">Solicitar Serviço</a></li>
+            <li><a href="#regras" class="text-gray-400 hover:text-white transition-colors duration-300">Regras e Condições</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Contato</h3>
+          <ul class="space-y-2">
+            <li class="flex items-center text-gray-400">
+              <i class="fas fa-envelope mr-2 text-primary-light"></i> info@filaporvoce.com
+            </li>
+            <li class="flex items-center text-gray-400">
+              <i class="fas fa-phone mr-2 text-primary-light"></i> +258 83 41 02 141
+            </li>
+            <li class="flex items-center text-gray-400">
+              <i class="fas fa-map-marker-alt mr-2 text-primary-light"></i> Maputo, Moçambique
+            </li>
+          </ul>
+          <div class="mt-4 flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="pt-6 text-center text-gray-500 text-sm">
+        <p>© 2025 FilaporVoce. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Inicializar AOS (Animate on Scroll)
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+    
+    // Detecção de modo escuro
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+    
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      if (event.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    });
+    
+    // Accordion
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.fas');
+        
+        // Toggle this accordion item
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          content.style.maxHeight = content.scrollHeight + 'px';
+          icon.style.transform = 'rotate(180deg)';
+        }
+      });
+    });
+    
+    // Abrir o primeiro accordion por padrão
+    const firstAccordion = document.querySelector('.accordion-header');
+    if (firstAccordion) {
+      firstAccordion.click();
+    }
+    
+    // Contadores animados
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
+    
+    const animateCounters = () => {
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const increment = target / speed;
+        
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          setTimeout(animateCounters, 1);
+        } else {
+          counter.innerText = target;
+        }
+      });
+    };
+    
+    // Iniciar contadores quando chegarem no viewport
+    const observerOptions = {
+      threshold: 0.5
+    };
+    
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    if (counters.length > 0) {
+      counterObserver.observe(counters[0].parentElement.parentElement);
+    }
+    
+    // Progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('progressBar').style.width = scrolled + '%';
+      
+      // Botão voltar ao topo
+      const backToTopButton = document.getElementById('backToTop');
+      if (winScroll > 300) {
+        backToTopButton.classList.remove('opacity-0');
+        backToTopButton.classList.add('opacity-100');
+      } else {
+        backToTopButton.classList.remove('opacity-100');
+        backToTopButton.classList.add('opacity-0');
+      }
+      
+      // Destacar seção ativa no menu
+      const sections = document.querySelectorAll('section[id]');
+      let currentSectionId = '';
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        
+        if (winScroll >= sectionTop && winScroll < sectionTop + sectionHeight) {
+          currentSectionId = section.getAttribute('id');
+        }
+      });
+      
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active-section');
+        if (link.getAttribute('href') === '#' + currentSectionId) {
+          link.classList.add('active-section');
+        }
+      });
+    });
+    
+    // Botão voltar ao topo
+    document.getElementById('backToTop').addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // JavaScript para rolagem suave ao clicar nos links de navegação
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href")).scrollIntoView({
+          behavior: "smooth"
+        });
+      });
+    });
+  </script>
+
+
+</body></html>
