@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const FormadorSchema = new mongoose.Schema({
-    nome: String,
-    telefone: String,
-    regiao: String,
-    precoPorHora: Number,
-    disponibilidade: Boolean
+  nome: { type: String, required: true },
+  telefone: { type: String, required: true },
+  regiao: { type: String, required: true },
+  precoPorHora: { type: Number, required: true },
+  disponibilidade: { type: String, required: true } // Alterado para String
 });
 
 module.exports = mongoose.model('Formador', FormadorSchema);
