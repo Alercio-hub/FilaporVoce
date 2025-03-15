@@ -25,9 +25,10 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/formadores', formadoresRouter);  // Agora está após os middlewares
 
 // Rota raiz
-app.get("/", (req, res) => {
-    res.send("🚀 Backend do FilaporVoce funcionando!");
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Conexão com o backend funcionando!' });
 });
+
 
 // Iniciar servidor
 const PORT = process.env.PORT || 5000;
