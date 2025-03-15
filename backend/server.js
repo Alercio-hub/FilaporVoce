@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const authRouter = require('./routes/auth');
+app.use('/api/auth', authRouter);
+
 
 // Importar rotas
 const formadoresRouter = require('./routes/formadores');
