@@ -969,6 +969,12 @@
         document.documentElement.classList.remove('dark');
       }
     });
+
+   fetch("http://localhost:5000/api/formadores")
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+
     
     // Accordion
     document.querySelectorAll('.accordion-header').forEach(header => {
